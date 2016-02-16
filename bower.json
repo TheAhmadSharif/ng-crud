@@ -1,0 +1,27 @@
+{
+  "name": "angular-crud",
+  "description": "none",
+  "main": "index.html",
+  "authors": [
+    "ahmad"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "none"
+  ],
+  "moduleType": [],
+  "homepage": "http://git.com",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "~2.2.0",
+    "angular": "~1.4.9",
+    "bootstrap": "~3.3.6"
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "name": "angular-crud",
+  "version": "0.1.0",
+  "description": "CRUD",
+  "repository": {
+    "type": "git",
+    "url": "http://git.com"
+  },
+  "keywords": [
+    "crud"
+  ],
+  "author": "ahmad",
+  "license": "MIT",
+  "dependencies": {
+    "bower": "^1.7.7",
+    "http-server": "^0.8.5"
+  },
+  "scripts": {
+    "start": "http-server -a localhost -p 8800 -c-1",
+    "prestart": "npm install"
+  }
+
+}
+
+
