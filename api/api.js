@@ -32,8 +32,7 @@ appLisent.get('/api/check/:firstname', MONGO_UNIQUE_CODE )
 
 
 
-
-
+ 
 /* Mongo Get */
 
 function MONGO_SELECT(req, res) {

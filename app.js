@@ -1,12 +1,82 @@
 
 var app = angular.module('crudApp',['ngResource']);
-app.controller('crudController', ['$scope', '$http', 'crudFactory', 'UniqueCodeService', 'services',function($scope, $http, crudFactory, UniqueCodeService, services) {
+app.controller('crudController', ['$scope', '$http','$resource', 'crudFactory', 'UniqueCodeService', 'TestServices',function($scope, $http, $resource, crudFactory, UniqueCodeService, TestServices) {
 	$scope.student = {
 		"firstname": "Ahmad",
 		"lastname": "Sharif",
 	}
 
-    $scope.names = ["Emil", "Tobias", "Linus"];
+    $scope.cat = TestServices.get();
+
+
+    $scope.People = {
+      "null": 
+      [
+        {
+          "Name": "Ahmad",
+          "Age": "22"
+        },
+
+        {
+          "Name": "Zahid",
+          "Age": "20"
+        }
+      ]
+    }
+
+
+    $scope.dataset = {
+          "glossary": {
+              "title": "example glossary",
+          "GlossDiv": {
+                  "title": "S",
+            "GlossList": {
+                      "GlossEntry": {
+                          "ID": "SGML",
+                "SortAs": "SGML",
+                "GlossTerm": "Standard Generalized Markup Language",
+                "Acronym": "SGML",
+                "Abbrev": "ISO 8879:1986",
+                "GlossDef": {
+                              "para": "A meta-markup language, used to create markup languages such as DocBook.",
+                  "GlossSeeAlso": ["GML", "XML"]
+                          },
+                "GlossSee": "markup"
+                      }
+                  }
+              }
+          }
+      }
+
+      console.log($scope.dataset.glossary.title);
+
+    $scope.products = [{
+      Name: "Soap",
+      Price: "25",
+      Quantity: "10"
+    }, {
+      Name: "Bag",
+      Price: "100",
+      Quantity: "15"
+    }, {
+      Name: "Pen",
+      Price: "15",
+      Quantity: "13"
+    }];
+
+
+    this.employeeList = {"employees":[
+    {"firstName":"John", "lastName":"Doe"},
+    {"firstName":"Anna", "lastName":"Smith"},
+    {"firstName":"Peter", "lastName":"Jones"}
+]}
+
+     $scope.EditBlock= false; 
+     console.log($scope.EditBlock);
+
+    $scope.EditData = function () {
+      $scope.EditBlock= true; 
+    }
 
     $scope.addData = function () {
 
@@ -21,28 +91,46 @@ app.controller('crudController', ['$scope', '$http', 'crudFactory', 'UniqueCodeS
     		last_name: $scope.student.lastname,
     	}
 
-    	crudFactory.post(postData).$promise.then(function(data) {
-        $scope.get();
-        console.log("Save Succesfully");
-      }, function(error) {
-        console.log("Save not done,please try again");
-      });
+        crudFactory.post(postData).$promise.then(function(data) {
+            console.log("Save Succesfully");
+          }, function(error) {
+            console.log("Save not done,please try again");
+          });
 
     }
 
-    services.ahmad();
+    $scope.DeleteData = function (abcd) {
+      var id = abcd
+      console.log(id);
+      if (id) {
+        console.log(id);
+           /*crudFactroy.delete('http://localhost:3300/api/', id, function (){
+              console.log('Deleted Succesfully');
+          });
+          $scope.get();*/
+      }
+    }
 
-   
 
+
+
+    /* GET DATA FROM DB */
+
+    $scope.get = function get() {
+      crudFactory.get('http://localhost:3300/api/',{},function(data){
+        $scope.items = data;
+        console.log(data);
+        console.log('hi');
+      });
+    };
+    $scope.get();
 }]);
-
 
 app.directive('preventDefault', [function(){
 	return {
 		restrict: 'ACE',
 		link: function(scope, element, attrs) {
 				 element.on('click', function(e){
-				 	console.log('Clicked');
                     e.preventDefault();
                     e.stopPropagation()
 
@@ -52,11 +140,12 @@ app.directive('preventDefault', [function(){
 }]);
 
 app.factory('crudFactory', function($resource) {
-
-
-        return $resource('http://localhost:3300/api/:id', {
+        return $resource(
+          'http://localhost:3300/api/:id', 
+          {
                 id: '@id'
-        }, {
+           },
+           {
                 post: {
                         method: 'POST'
                 },
@@ -86,7 +175,8 @@ app.factory('UniqueCodeService', function ($resource) {
 
 });
 
-app.service('services', ['$http', function($http) {
+app.service('TestServices', ['$http', function($http) {
+  this.value = '';  
   this.get = function() {
     return $http.get('http://localhost:3300/api');
   };
@@ -94,8 +184,12 @@ app.service('services', ['$http', function($http) {
     return $http.post('http://localhost:3300/api/', 'x');
   }
 
-  this.ahmad = function () {
-    console.log('hi');
-    return 2;
+  this.ahmad = function (data) {
+    this.value = data;
   }
+
+  this.getDAta = function(){
+    return this.value;
+  }
+
 }]);
