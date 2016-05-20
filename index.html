@@ -27,20 +27,6 @@
 				<button type="submit" class="btn btn-default" ng-click="addData()" prevent-default> Save </button>
 				</form>
 
-				<!-- <ul>
-					<li ng-repeat="name in products track by $index"> <a href="#">{{ name.Name }} {{ name.Price}}</a></li>
-				</ul>
-				
-				<ul>
-					<li ng-repeat="employee in employeeList.employees track by $index"> <a href="#">{{ employee.firstName }} {{ employee.lastName}}</a></li>
-				</ul>
-				 -->
-				<!-- <strong>People</strong>
-				<ul>
-					<li ng-repeat="PeopleList in People.null">{{ PeopleList.Name }}</li>
-				</ul>
-				 -->
-
 				 <div class="bg-grey">
 					 	<div class="col-md-12">
 					 				<div class="col-sm-12">
@@ -49,8 +35,9 @@
 									<table class="table">
 										<tr ng-repeat="a in items">
 											<td> {{ a.first_name }}</td>
+											<td> {{ a.last_name }}</td>
 												<td>
-													<button ng-click="DeleteData(a)" class="btn btn-xs btn-default">Delete</button>
+													<button ng-click="DeleteData(a._id)" class="btn btn-xs btn-default">Delete</button>
 													<button ng-click="EditData(a)" class="btn btn-xs btn-default">Edit</button>
 												</td>
 										</tr>
@@ -61,10 +48,6 @@
 		
 			
 
-			 <ul>
-			 	<li ng-repeat="a in dataset.glossary">{{ a.title }}</li>
-			 </ul>
-				
 
 			</div> <!-- End Col --> 
 			<div class="col-sm-8">

@@ -30,6 +30,19 @@ appLisent.get('/api/check/:firstname', MONGO_UNIQUE_CODE )
 
 
 
+/* Delete ID */
+
+function MONGO_DELETE_ID(req, res){
+    var id = req.params.id;  
+    var obj_id = new ObjectID(id);  
+    console.log(id);
+  
+    db.collection('crud', function(err, collection) {
+        collection.remove({'_id': obj_id } ,function(err, i) {
+            res.end(JSON.stringify({'message':'Delete Succesfull'}));    //get all data from db and render on index page 
+        });
+    });
+}
 
 
  
@@ -101,9 +114,6 @@ function MONGO_UPDATE_ID(req, res){
     var input = JSON.parse(JSON.stringify(req.body))
     console.log(input.name);
 
-
-
- 
             db.collection('crud', function(err, collection) {
                 collection.update({'_id':obj_id},body,function(err, result) {
                     if (err) {
@@ -118,20 +128,6 @@ function MONGO_UPDATE_ID(req, res){
                 });
             });
 
-
-
-}
-
-function MONGO_DELETE_ID(req, res){
-    var id = req.params.id;  
-	var obj_id = new ObjectID(id);  
-  
-    db.collection('crud', function(err, collection) {
-        collection.remove({'_id':obj_id},function(err, i) {
-            result = i;
-            res.end(JSON.stringify({'message':'Delete Succesfull'}));    //get all data from db and render on index page 
-        });
-    });
 
 
 }
