@@ -1,7 +1,7 @@
-## Angular JS - Basic CRUD Application
+#### Angular JS - Basic CRUD Application
 --- 
 
-### Description
+#### Description
 ---
 
 The very basic CRUD Application. Tools i use 
