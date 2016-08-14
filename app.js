@@ -33,12 +33,13 @@ app.controller('crudController', ['$scope', '$http','$resource', 'crudFactory',f
         crudFactory.post(postData).$promise.then(function(data) {
            
             console.log("Save Succesfully");
+            $scope.get();
 
           }, function(error) {
             console.log("Save not done,please try again");
           });
 
-         $scope.get();
+         
 
     }
 

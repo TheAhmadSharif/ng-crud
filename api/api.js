@@ -70,6 +70,8 @@ function MONGO_INSERT(req, res) {
 
 				res.end(JSON.stringify({'status':'Save Succesfull'}));       
 			}
+
+            res.send(result);
 		})
 	})
 }

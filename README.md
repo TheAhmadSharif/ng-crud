@@ -25,6 +25,6 @@ The MIT License (MIT)
 
 Copyright (c) 2016, Ahmad Sharif
 
-This javascript calculator is licensed under the MIT license. (http://opensource.org/licenses/MIT)
+This licensed under the MIT license. (http://opensource.org/licenses/MIT)
 
 
