@@ -1,12 +1,14 @@
-var bodyParser = require("body-parser")
-var express = require("express")
-var http = require("http")
-var cors = require("cors")
+var bodyParser = require("body-parser");
+var express = require("express");
+var http = require("http");
+var cors = require("cors");
 
 
+var appLisent = express();
+var server = http.createServer(appLisent); 
 
-var appLisent = express()
-var server = http.createServer(appLisent) 
+var socket = require("socket.io")(server);
+
 appLisent.use(bodyParser.json());
 appLisent.use(bodyParser.urlencoded({ extended: true }));
 
@@ -35,7 +37,6 @@ appLisent.get('/api/check/:firstname', MONGO_UNIQUE_CODE )
 function MONGO_DELETE_ID(req, res){
     var id = req.params.id;  
     var obj_id = new ObjectID(id);  
-    console.log(id);
   
     db.collection('crud', function(err, collection) {
         collection.remove({'_id': obj_id } ,function(err, i) {
@@ -58,7 +59,6 @@ function MONGO_SELECT(req, res) {
 
 function MONGO_INSERT(req, res) {
 	var data = req.body;
-	console.log(data);
 
 	db.collection('crud', function(err,collection) {
 		collection.insert(data, function(err, result) {
@@ -66,12 +66,11 @@ function MONGO_INSERT(req, res) {
 				res.end(JSON.stringify(
 					{'error': 'An error has occured'}));
 
-				console.log("1 row inserted.");
-
 				res.end(JSON.stringify({'status':'Save Succesfull'}));       
 			}
 
             res.send(result);
+            socket.emit('speak', 'One Date Inserted');
 		})
 	})
 }
@@ -129,9 +128,6 @@ function MONGO_UPDATE_ID(req, res){
                     }
                 });
             });
-
-
-
 }
 
 

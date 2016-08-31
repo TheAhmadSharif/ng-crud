@@ -1,22 +1,49 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
+
 	<title>Angular </title>
 	<link rel="stylesheet" href="assets/bower_components/bootstrap/dist/css/bootstrap.css">
 	<script src="assets/bower_components/angular/angular.min.js"></script>
 	 <script src="assets/bower_components/angular-resource/angular-resource.js"></script>
+	 <script src="http://localhost:3300/socket.io/socket.io.js"></script>
 
 	<script src="app.js"></script>
+
+	<script>
+			var socket = io.connect('http://localhost:3300');
+			socket.on('speak', function(msg){
+
+
+
+			var time = setTimeout(function () {
+				document.getElementById('message').innerHTML = msg;
+			}, 100);
+
+
+			setTimeout(function () {
+				document.getElementById('message').innerHTML = null;
+			}, 2000);
+
+
+				
+			})
+	</script>
 </head>
 <body>
-	<div class="container">
-		<div class="row" ng-app="crudApp">
+	<div class="container" ng-app="crudApp" ng-controller="crudController">
+		<div class="row">
+			<div class="col-sm-12">
+					<a href="#" class="btn btn-default mt-10" ng-click="initState()"> <span class="glyphicon glyphicon-plus"></span> Add New </a> 
+			</div> <!-- End col 12 -->
+		</div> <!-- End row -->
+		<div class="row">
+			<div class="col-sm-6">
 
-			<div class="col-sm-4" ng-controller="crudController">
 				<form action="#" name="studentForm" method="post" class="mtb-30" novalidate>
-
-							<h4>Add Data</h4>
+					
+					
+				<h4>{{ student.addType }} Data</h4>
 				<div class="form-group">
 					<input type="text" class="form-control" placeholder="First Name" ng-model="student.firstname" autocompleter="off">
 				</div> <!-- End -->
@@ -24,7 +51,10 @@
 				<div class="form-group">
 					<input type="text" class="form-control" placeholder="Last Name" ng-model="student.lastname">
 				</div>
-				<button type="submit" class="btn btn-default" ng-click="addData()" prevent-default> Save </button>
+				<button type="submit" ng-show="student.addBtn" class="btn btn-default" ng-click="addData()" prevent-default> Save </button>
+
+				<button type="submit" ng-show="student.updateBtn" class="btn btn-default" ng-click="addData()" prevent-default> Update </button>
+
 				</form>
 
 				 <div class="bg-grey">
@@ -32,16 +62,18 @@
 					 				<div class="col-sm-12">
 											<h4>List Data</h4>
 									</div> <!-- End Col -->
-									<table class="table">
+									<table class="table data-table">
 										<tr ng-repeat="a in items">
 											<td> {{ a.first_name }}</td>
 											<td> {{ a.last_name }}</td>
 												<td>
 													<button ng-click="DeleteData(a._id)" class="btn btn-xs btn-default">Delete</button>
-													<button ng-click="EditData(a)" class="btn btn-xs btn-default">Edit</button>
+													<button ng-click="editData(a)" class="btn btn-xs btn-default">Edit</button>
 												</td>
 										</tr>
 									</table>
+
+									<p id="message"></p>
 					 	</div> <!-- End -->
 				 </div> <!-- End  -->
 				
@@ -50,7 +82,7 @@
 
 
 			</div> <!-- End Col --> 
-			<div class="col-sm-8">
+			<div class="col-sm-6">
 				<div class="form-group mtb-30">
 						<form action="#">
 									<h4>Search Data</h4>
@@ -68,29 +100,7 @@
 				</div> <!-- End Form -->
 			
 
-			<div class="row">
-					<div class="edit-block" ng-show="EditBlock">
-							
-							<div class="col-sm-12">
-									<form action="#">
-												<h4>Edit Data</h4>
-										<div class="form-group">
-											<input type="text" class="form-control" ng-model="edit.FirstName" placeholder="First Name">
-										</div> <!-- End -->
-
-
-										<div class="form-group">
-											<input type="text" class="form-control" ng-model="edit.LastName" placeholder="Last Name">
-										</div> <!-- End -->
-
-										<div class="form-group">
-											<button ng-click="updateData()" class="btn btn-default">Update</button>
-										</div>
-
-									</form>
-							</div> <!-- End -->
-					</div> <!-- End Edit Block -->
-			</div> <!-- End row -->
+			
 			</div> <!-- End Col 8 -->
 
 		</div>  <!-- End row -->
@@ -98,6 +108,10 @@
 
 
 	<style>
+
+		.container {
+			width: 940px !important;
+		}
 		.mtb-30 {
 			margin-top: 30px;
 			margin-bottom: 30px;
@@ -135,6 +149,10 @@
 		.bg-grey {
 			background-color: #F2F2F2;
 		}
+		.mt-10 {
+			margin-top: 10px !important;
+		}
+
 	</style>
 	
 
