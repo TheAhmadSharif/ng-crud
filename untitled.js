@@ -9,46 +9,21 @@ app.controller('crudController', ['$scope', '$http','$resource','serviceID',func
       $scope.student.addBtn = true;
       $scope.student.updateBtn = false;
   }
-  $scope.initState();
-
-  console.log('From Initial Block', $scope.student);
 
 
-  $scope.updateCallback = function () {
-
-      $http({
-      method: 'PUT',
-      url: 'http://localhost:3300/api/582c1e183b12b9289185735f'
-      }).then(function successCallback(response) {
-         
-        }, function errorCallback(response) {
-          
-        });
-
-      console.log('hii');
-  }
-
-  
-
-  $scope.updateCallback();
-
-  $scope.editData = function () {
-      $scope.student = {
-        'addType': 'Update',
-        'addBtn': false,
-        'updateBtn': true
-      }
-  }
 
   $scope.objects = function () {
     serviceID.getData(function(hello){
-        $scope.dataSet = hello.data;
-        console.log($scope.dataSet);
+        $scope.student = hello.data;
     });
   }
 
   $scope.postData = function () {
-    serviceID.postData();
+    serviceID.postData(function(data){
+        serviceID.getData(function(hello){
+           $scope.student = hello.data;
+        });
+    });
   } 
 
   function updateData () {
@@ -57,25 +32,22 @@ app.controller('crudController', ['$scope', '$http','$resource','serviceID',func
 
   $scope.postData(updateData);
 
-  $scope.removeObject = function (id) {
-    serviceID.remove(id, updateData);
+  $scope.removeObject = function (id, updateData) {
+    serviceID.remove(id, function(){
+
+     serviceID.getData(function(hello){
+           $scope.student = hello.data;
+        });
+
+
+    });
   }
 
   $scope.objects();
 
-
-
-   $scope.curPage = 0;
-   $scope.pageSize = 2;
-  $scope.numberOfPages = function() {
-         return Math.ceil($scope.dataSet.length / $scope.pageSize);
-      };
-
-
 }]);
 
 /* End Controller */
-
 app.directive('preventDefault', function () {
     return {
       link: function (scope, elem) {
@@ -101,22 +73,7 @@ this.getData = function (callback) {
   );
 }
 
-var firstName = ['Mr.', 'Ahmad', 'Nafis'];
-var lastName = ['Sharif', 'Ahmad', 'Rahman'];
-
-this.postData = function (updateData) {
-
-  var firstName = ['Mr.','Max', 'Mark','Sir'];
-  var lastName = ['Thomas', 'Jacob', 'Peter', 'John'];
-
-  var firstName = firstName[Math.floor(firstName.length * Math.random())];
-  var lastName = lastName[Math.floor(firstName.length * Math.random())];
-
-  console.log(firstName, lastName);
-
-
-
-
+this.postData = function (call) {
   $http({
     method: 'POST', 
     url: 'http://localhost:3300/api',
@@ -124,11 +81,12 @@ this.postData = function (updateData) {
       'Content-Type': 'application/json'
     },
     data: {
-      firstname: firstName,
-      lastname: lastName
+      firstname: 'Ahmad',
+      lastname: 'Sharif'
     }
 
     }).then(function successCallback(response) {
+      call(response);
         console.log('Success Add');
     }, function failureCallback (error) {
         console.log(error);
@@ -136,7 +94,7 @@ this.postData = function (updateData) {
     })
   }
 
-this.remove = function (ID, updateData) {
+this.remove = function (ID, call) {
   $http({
     method: 'DELETE',
     url: 'http://localhost:3300/api/'+ ID,
@@ -149,7 +107,7 @@ this.remove = function (ID, updateData) {
     
   }).then (function successCallback (response) {
       console.log('Success Remove');
-      updateData();
+      call();
 
   }, function failureCallback (failureCallback) {
      console.log(failureCallback);

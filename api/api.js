@@ -1,7 +1,7 @@
-var bodyParser = require("body-parser");
-var express = require("express");
-var http = require("http");
-var cors = require("cors");
+var bodyParser = require('body-parser');
+var express = require('express');
+var http = require('http');
+var cors = require('cors');
 
 
 var appLisent = express();
@@ -19,35 +19,46 @@ appLisent.use(cors());
 var mongo = require("mongodb")
 var host = "127.0.0.1"
 var port = "27017"
-var ObjectID = require('mongodb').ObjectID
+var ObjectID = require('mongodb').ObjectId;
 var db = new mongo.Db("crud", new mongo.Server(host, port, {}));
 db.open();
-/* JSON API */
 
+/* JSON API */
 appLisent.get('/api', MongoFind);
 appLisent.post('/api', MongoInsert);
 appLisent.delete('/api/:id', MongoRemove);
+appLisent.put('/api/:id', MongoUpdate);
 
 
 
- 
 /* Mongo Get */
 function MongoFind(httpRequest, httpResponse) {
 	db.collection('Student', function (error, collection){
-		collection.find().toArray(function(error, result){
+		collection.find().limit(1).toArray(function(error, result){
             httpResponse.send(JSON.stringify(result));
-		})
+		});
 	})
 }
 
 
-/* Insert */
+/* Mongo Update */ 
+function MongoUpdate (httpRequest, httpResponse) {
+    console.log(httpRequest.params);
+    db.collection('Student', function (error, collection) {
+         collection.update({_id: httpRequest.params.id}, { "id": ObjectId(httpRequest.params.id), 
+            "firstname": "Mr. New Update", "lastname": "Mr. new Updatee"}, { upsert: true,'new': true });
+         console.log(httpRequest.params.id);
+    
+    })
+
+    console.log('MongoUpdate 54');
+}
+
+/* Mongo Insert */
 function MongoInsert (httpRequest, httpResponse) {
-    console.log("Insert data");
-    var data = httpRequest.body;
+    var data = [{firstname:'Mr.', lastname: 'node' }];
     db.collection('Student', function (error, collection) {
         collection.insert(data, function (error, result) {
-            console.log(result, 'error');
             if (error) {
                 httpResponse.end(JSON.stringify({'error': 'Error occured'}))
             }
@@ -57,16 +68,23 @@ function MongoInsert (httpRequest, httpResponse) {
         })
     })
 }
+
+/* Mongo Remove */
 function MongoRemove (httpRequest, httpResponse) {
-    console.log(httpResponse);
+    var id = new ObjectID(httpRequest.params.id);  
     db.collection('Student', function (error, collection ) {
-        collection.remove({ '_id': ObjectID, function (error, result) {
-                if (error) {
+
+        collection.remove({ '_id': id }, function (bug, success) {
+                if (bug) {
                     httpResponse.end(json.stringify({'error': 'Error Occured'}))
                 }
-                httpResponse.send(JSON.stringify(result));
-            } 
-        })
+
+                if (success) {
+                    console.log('remove success');
+                    httpResponse.send(success);
+                }
+                
+            });
     })    
 }
 

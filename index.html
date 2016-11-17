@@ -50,7 +50,7 @@
 				</div>
 				<button type="submit" ng-show="student.addBtn" class="btn btn-default" ng-click="addData()" prevent-default> Save </button>
 
-				<button type="submit" ng-show="student.updateBtn" class="btn btn-default" ng-click="addData()" prevent-default> Update </button>
+				<button type="submit" ng-show="student.updateBtn" class="btn btn-default" ng-click="updateData()" prevent-default> Update </button>
 
 				</form>
 
@@ -60,20 +60,30 @@
 											<h4>List Data</h4>
 									</div> <!-- End Col -->
 									<table class="table data-table">
-										<tr ng-repeat="a in student">
+										<tr ng-repeat="a in dataSet">
 											<td> {{ $index + 1 }}</td>
 											<td> {{ a.firstname }}</td>
 											<td> {{ a.lastname }}</td>
 												<td>
-													<button ng-click="removeObject(a._id)" class="btn btn-xs btn-default">Delete</button>
-													<button ng-click="editData(a)" class="btn btn-xs btn-default">Edit</button>
+													<button ng-click="removeObject(a._id, updateData)" class="btn btn-xs btn-default">Delete</button>
+													<button ng-click="editData(a._id)" class="btn btn-xs btn-default">Edit</button>
 												</td>
 										</tr>
+										<tr>
+					          <td colspan="4" ng-show="dataSet.length">  
+					            <button ng-disabled="curPage == 0" ng-click="curPage=curPage-1"> &lt;</button>
+					             <span>{{curPage + 1}} of {{ numberOfPages() }}</span>
+					             <button ng-disabled="curPage >= dataSet.length/pageSize - 1"
+					             ng-click="curPage = curPage+1">&gt;</button>
+					          </td>
+					        </tr>
 									</table>
 
 									<p id="message"></p>
 					 	</div> <!-- End -->
 				 </div> <!-- End  -->
+
+
 
 				
 		
